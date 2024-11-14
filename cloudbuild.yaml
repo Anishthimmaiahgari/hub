@@ -31,7 +31,7 @@ steps:
       - 'gcloud'
       - 'run'
       - 'deploy'
-      - 'python_pro5' 
+      - 'python-pro5' 
       - '--image'
       - 'gcr.io/$PROJECT_ID/python-pro1'  
       - '--region'
