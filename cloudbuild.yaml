@@ -1,39 +1,26 @@
 options:
-  logging: 'CLOUD_LOGGING_ONLY'
+  logging: 'CLOUD_LOGGING_ONLY' 
 
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    # env:
-    #   - '_PROJECT_ID=modern-heading-440004-q8' 
-    #   - '_IMAGE_NAME=python_pro1'
     args:
       - 'build'
       - '-t'
-      - 'gcr.io/$PROJECT_ID/python_pro1'  
+      - 'gcr.io/$PROJECT_ID/python_pro7'
       - '.'
 
-  
   - name: 'gcr.io/cloud-builders/docker'
-    # env:
-    #   - '_PROJECT_ID=modern-heading-440004-q8' 
-    #   - '_IMAGE_NAME=python_pro1' 
     args:
       - 'push'
-      - 'gcr.io/$PROJECT_ID/python_pro1'  
-
-  
+      - 'gcr.io/$PROJECT_ID/python_pro7'
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    # env:
-    #   - '_PROJECT_ID=modern-heading-440004-q8' 
-    #   - '_IMAGE_NAME=python_pro1' 
-    #   - '_DEPLOYMENT_NAME=python-pro4'  
     args:
       - 'gcloud'
       - 'run'
       - 'deploy'
-      - 'python-pro5' 
+      - 'python-pro1'
       - '--image'
-      - 'gcr.io/$PROJECT_ID/python-pro1'  
+      - 'gcr.io/$PROJECT_ID/python_pro7'
       - '--region'
       - 'us-central1'
       - '--port=8080'
