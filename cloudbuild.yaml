@@ -1,1 +1,34 @@
-kmwnddesd
+steps:
+  # Step 1: Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/pyhon_pro:$SHORT_SHA'
+      - '.'
+
+  # Step 2: Push the Docker image to Google Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/python_pro:$SHORT_SHA'
+
+  # Step 3: Deploy the Docker image to Google Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    args:
+      - 'gcloud'
+      - 'run'
+      - 'deploy'
+      - 'your-app-name'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/python_pro:$SHORT_SHA'
+      - '--region'
+      - 'us-central1'  # Specify the region where Cloud Run will deploy
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'  # Optionally allow unauthenticated access
+
+# Specify the images that should be built
+images:
+  - 'gcr.io/$PROJECT_ID/python_pro:$SHORT_SHA'
+
