@@ -5,7 +5,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     env:
       - '_PROJECT_ID=modern-heading-440004-q8' 
-      - '_IMAGE_NAME=python_pro7'
+      - '_IMAGE_NAME=python_pro1'
     args:
       - 'build'
       - '-t'
@@ -16,7 +16,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     env:
       - '_PROJECT_ID=modern-heading-440004-q8' 
-      - '_IMAGE_NAME=python_pro7' 
+      - '_IMAGE_NAME=python_pro1' 
     args:
       - 'push'
       - 'gcr.io/$_PROJECT_ID/$_IMAGE_NAME'  
@@ -25,8 +25,8 @@ steps:
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     env:
       - '_PROJECT_ID=modern-heading-440004-q8' 
-      - '_IMAGE_NAME=python_pro7' 
-      - '_DEPLOYMENT_NAME=python-pro1'  
+      - '_IMAGE_NAME=python_pro1' 
+      - '_DEPLOYMENT_NAME=python-pro4'  
     args:
       - 'gcloud'
       - 'run'
