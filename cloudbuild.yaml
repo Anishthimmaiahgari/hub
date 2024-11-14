@@ -19,7 +19,7 @@ steps:
       - 'gcloud'
       - 'run'
       - 'deploy'
-      - 'python_pro7'
+      - 'python-pro1'
       - '--image'
       - 'gcr.io/$PROJECT_ID/python_pro7:$SHORT_SHA'
       - '--region'
