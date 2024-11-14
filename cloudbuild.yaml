@@ -1,5 +1,5 @@
-# options:
-#   logging: 'CLOUD_LOGGING_ONLY'  # Logs will be sent to Cloud Logging only
+options:
+  logging: 'CLOUD_LOGGING_ONLY'  # Logs will be sent to Cloud Logging only
 
 steps:
   - name: 'gcr.io/cloud-builders/docker'
