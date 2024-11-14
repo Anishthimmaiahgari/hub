@@ -1,5 +1,5 @@
 options:
-  logs_bucket: 'python-pro5'  # Specify the Cloud Storage bucket where logs should be stored
+  logs_bucket: 'NONE'  # Specify the Cloud Storage bucket where logs should be stored
 
 
   
