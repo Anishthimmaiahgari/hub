@@ -2,7 +2,7 @@ options:
   logging: 'CLOUD_LOGGING_ONLY'
 
 steps:
-  - name: 'gcr.io/cloud-builders/anish'
+  - name: 'gcr.io/cloud-builders/docker'
     # env:
     #   - '_PROJECT_ID=modern-heading-440004-q8' 
     #   - '_IMAGE_NAME=python_pro1'
@@ -13,7 +13,7 @@ steps:
       - '.'
 
   
-  - name: 'gcr.io/cloud-builders/anish'
+  - name: 'gcr.io/cloud-builders/docker'
     # env:
     #   - '_PROJECT_ID=modern-heading-440004-q8' 
     #   - '_IMAGE_NAME=python_pro1' 
