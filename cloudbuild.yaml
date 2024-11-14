@@ -1,3 +1,8 @@
+options:
+  logs_bucket: 'python-pro5'  # Specify the Cloud Storage bucket where logs should be stored
+
+
+  
 steps:
   # Step 1: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
