@@ -9,7 +9,7 @@ steps:
     args:
       - 'build'
       - '-t'
-      - 'gcr.io/$_PROJECT_ID/python_pro1'  
+      - 'gcr.io/$PROJECT_ID/python_pro1'  
       - '.'
 
   
@@ -19,7 +19,7 @@ steps:
     #   - '_IMAGE_NAME=python_pro1' 
     args:
       - 'push'
-      - 'gcr.io/$_PROJECT_ID/python_pro1'  
+      - 'gcr.io/$PROJECT_ID/python_pro1'  
 
   
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -33,7 +33,7 @@ steps:
       - 'deploy'
       - 'python_pro5' 
       - '--image'
-      - 'gcr.io/$_PROJECT_ID/python-pro1'  
+      - 'gcr.io/$PROJECT_ID/python-pro1'  
       - '--region'
       - 'us-central1'
       - '--port=8080'
