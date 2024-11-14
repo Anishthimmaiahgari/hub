@@ -24,6 +24,7 @@ steps:
       - 'gcr.io/$PROJECT_ID/python_pro7:$SHORT_SHA'
       - '--region'
       - 'us-central1'
+      - '--port=8080'
       - '--platform'
       - 'managed'
       - '--allow-unauthenticated'
