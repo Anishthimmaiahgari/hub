@@ -24,11 +24,9 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Configure Docker for Google Cloud
-        run: gcloud auth configure-docker
-
-      - name: Build and push Docker image
         run: |
           IMAGE_NAME=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/cloud-run-source-deploy/my-app
+          gcloud auth configure-docker      
           docker build -t $IMAGE_NAME .
           docker push $IMAGE_NAME
 
