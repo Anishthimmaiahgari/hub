@@ -70,35 +70,35 @@ pipeline {
             }
         }
 
-        stage('Manual Approval for UAT') {
-            when {
-                branch 'las'
-            }
-            steps {
-                script {
-                    def userApproval = input(
-                        id: 'UserApproval', 
-                        message: 'Do you approve to deploy to UAT?', 
-                        parameters: [
-                            choice(
-                                name: 'ApprovalChoice', 
-                                choices: ['Yes', 'Abort'], 
-                                description: 'Choose whether to approve the deployment to UAT.'
-                            )
-                        ],
-                        timeout: 30,  // Timeout after 30 minutes
-                        timeoutMessage: 'User did not approve within the timeout period. Aborting.'
-                    )
-                    if (userApproval == 'Yes') {
-                        echo 'User approved to proceed with deployment to UAT.'
-                    } else {
-                        echo 'User did not approve. Aborting the pipeline.'
-                        currentBuild.result = 'ABORTED'
-                        error('User did not approve deployment to UAT. Aborting pipeline.')
-                    }
-                }
-            }
-        }
+        // stage('Manual Approval for UAT') {
+        //     when {
+        //         branch 'las'
+        //     }
+        //     steps {
+        //         script {
+        //             def userApproval = input(
+        //                 id: 'UserApproval', 
+        //                 message: 'Do you approve to deploy to UAT?', 
+        //                 parameters: [
+        //                     choice(
+        //                         name: 'ApprovalChoice', 
+        //                         choices: ['Yes', 'Abort'], 
+        //                         description: 'Choose whether to approve the deployment to UAT.'
+        //                     )
+        //                 ],
+        //                 timeout: 30,  // Timeout after 30 minutes
+        //                 timeoutMessage: 'User did not approve within the timeout period. Aborting.'
+        //             )
+        //             if (userApproval == 'Yes') {
+        //                 echo 'User approved to proceed with deployment to UAT.'
+        //             } else {
+        //                 echo 'User did not approve. Aborting the pipeline.'
+        //                 currentBuild.result = 'ABORTED'
+        //                 error('User did not approve deployment to UAT. Aborting pipeline.')
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Auth and Docker Build for UAT') {
             when {
@@ -130,39 +130,11 @@ pipeline {
             }
         }
 
-        stage('Manual Approval for Prod') {
-            when {
-                branch 'las'
-            }
-            steps {
-                script {
-                    def userApproval = input(
-                        id: 'UserApproval', 
-                        message: 'Do you approve to deploy to Prod?', 
-                        parameters: [
-                            choice(
-                                name: 'ApprovalChoice', 
-                                choices: ['Yes', 'Abort'], 
-                                description: 'Choose whether to approve the deployment to Prod.'
-                            )
-                        ],
-                        timeout: 30,  // Timeout after 30 minutes
-                        timeoutMessage: 'User did not approve within the timeout period. Aborting.'
-                    )
-                    if (userApproval == 'Yes') {
-                        echo 'User approved to proceed with deployment to Prod.'
-                    } else {
-                        echo 'User did not approve. Aborting the pipeline.'
-                        currentBuild.result = 'ABORTED'
-                        error('User did not approve deployment to Prod. Aborting pipeline.')
-                    }
-                }
-            }
-        }
+        
 
         stage('Auth and Docker Build for Prod') {
             when {
-                branch 'las'
+                branch 'manali'
             }
             steps {
                 script {
@@ -179,7 +151,7 @@ pipeline {
 
         stage('Deploy to Prod') {
             when {
-                branch 'las'
+                branch 'manali'
             }
             steps {
                 script {
