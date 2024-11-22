@@ -116,7 +116,6 @@ pipeline {
                 }
             }
         }
-        }
 
         // stage('Manual Approval for UAT') {
         //     when {
