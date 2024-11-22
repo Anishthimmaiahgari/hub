@@ -11,7 +11,6 @@ pipeline {
         IMAGE_NAME_UAT = "gcr.io/${PROJECT_ID}/reward_frontend_uat"
         IMAGE_NAME_PROD = "gcr.io/${PROJECT_ID}/reward_frontend_prod"
         SERVICE_ACCOUNT_JSON = credentials('gcp-serv-accnt')
-        GITHUB_TOKEN_X = credentials('github-token-code')
     }
 
     stages {
