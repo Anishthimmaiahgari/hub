@@ -15,14 +15,6 @@ pipeline {
     }
 
     stages {
-        stage('Clone Repository') {
-            steps {
-                script {
-                    def repoUrl = "https://github.com/Anishthimmaiahgari/hub.git".replace("https://", "https://${GITHUB_TOKEN_X}@")
-                    git url: repoUrl, branch: params.BRANCH_NAME
-                }
-            }
-        }
 
         stage('Install Docker') {
             steps {
