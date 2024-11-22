@@ -54,34 +54,6 @@ pipeline {
                     '''
                 }
             }
-            when {
-                branch 'las'
-            }
-            steps {
-                script {
-                    sh '''
-                        gcloud auth activate-service-account --key-file=${SERVICE_ACCOUNT_JSON}
-                        gcloud config set project ${PROJECT_ID}
-                        gcloud auth configure-docker --quiet
-                        docker build -t ${IMAGE_NAME_UAT} .
-                        docker push ${IMAGE_NAME_UAT}
-                    '''
-                }
-            }
-            when {
-                branch 'manali'
-            }
-            steps {
-                script {
-                    sh '''
-                        gcloud auth activate-service-account --key-file=${SERVICE_ACCOUNT_JSON}
-                        gcloud config set project ${PROJECT_ID}
-                        gcloud auth configure-docker --quiet
-                        docker build -t ${IMAGE_NAME_PROD} .
-                        docker push ${IMAGE_NAME_PROD}
-                    '''
-                }
-            }
         }
 
         stage('Deploy to QA') {
@@ -92,26 +64,6 @@ pipeline {
                 script {
                     sh '''
                         gcloud run deploy pyt-git-stack-qa --project ${PROJECT_ID} --image ${IMAGE_NAME_QA} --platform managed --region us-west1 --port=8080 --allow-unauthenticated --min-instances 1 --max-instances 2 --memory 3Gi
-                    '''
-                }
-            }
-            when {
-                branch 'las'
-            }
-            steps {
-                script {
-                    sh '''
-                        gcloud run deploy pyt-git-stack-uat --project ${PROJECT_ID} --image ${IMAGE_NAME_UAT} --platform managed --region us-west1 --port=8080 --allow-unauthenticated --min-instances 1 --max-instances 2 --memory 3Gi
-                    '''
-                }
-            }
-            when {
-                branch 'manali'
-            }
-            steps {
-                script {
-                    sh '''
-                        gcloud run deploy pyt-git-prod --project ${PROJECT_ID} --image ${IMAGE_NAME_PROD} --platform managed --region us-west1 --port=8080 --allow-unauthenticated --min-instances 1 --max-instances 2 --memory 3Gi
                     '''
                 }
             }
@@ -146,5 +98,82 @@ pipeline {
         //         }
         //     }
         // }
+        stage('Auth and Docker Build for UAT') {
+            steps {
+                script {
+                    sh '''
+                        gcloud auth activate-service-account --key-file=${SERVICE_ACCOUNT_JSON}
+                        gcloud config set project ${PROJECT_ID}
+                        gcloud auth configure-docker --quiet
+                        docker build -t ${IMAGE_NAME_UAT} .
+                        docker push ${IMAGE_NAME_UAT}
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy to UAT') {
+            steps {
+                script {
+                    sh '''
+                        gcloud run deploy pyt-git-stack-uat --project ${PROJECT_ID} --image ${IMAGE_NAME_UAT} --platform managed --region us-west1 --port=8080 --allow-unauthenticated --min-instances 1 --max-instances 2 --memory 3Gi
+                    '''
+                }
+            }
+        }
+
+        stage('Manual Approval for Prod') {
+            steps {
+                script {
+                    def userApproval = input(
+                        id: 'UserApproval', 
+                        message: 'Do you approve to deploy to Prod?', 
+                        parameters: [
+                            choice(
+                                name: 'ApprovalChoice', 
+                                choices: ['Yes', 'Abort'], 
+                                description: 'Choose whether to approve the deployment to Prod.'
+                            )
+                        ],
+                        timeout: 30,  // Timeout after 30 minutes
+                        timeoutMessage: 'User did not approve within the timeout period. Aborting.'
+                    )
+                    if (userApproval == 'Yes') {
+                        echo 'User approved to proceed with deployment to Prod.'
+                    } else {
+                        echo 'User did not approve. Aborting the pipeline.'
+                        currentBuild.result = 'ABORTED'
+                        error('User did not approve deployment to Prod. Aborting pipeline.')
+                    }
+                }
+            }
+        }
+
+        stage('Auth and Docker Build for Prod') {
+            steps {
+                script {
+                    sh '''
+                        gcloud auth activate-service-account --key-file=${SERVICE_ACCOUNT_JSON}
+                        gcloud config set project ${PROJECT_ID}
+                        gcloud auth configure-docker --quiet
+                        docker build -t ${IMAGE_NAME_PROD} .
+                        docker push ${IMAGE_NAME_PROD}
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy to Prod') {
+            steps {
+                script {
+                    sh '''
+                        gcloud run deploy pyt-git-prod --project ${PROJECT_ID} --image ${IMAGE_NAME_PROD} --platform managed --region us-west1 --port=8080 --allow-unauthenticated --min-instances 1 --max-instances 2 --memory 3Gi
+                    '''
+                }
+            }
+        }
+    }
+}
+
     }
 }
