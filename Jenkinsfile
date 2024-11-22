@@ -54,6 +54,34 @@ pipeline {
                     '''
                 }
             }
+            when {
+                branch 'las'
+            }
+            steps {
+                script {
+                    sh '''
+                        gcloud auth activate-service-account --key-file=${SERVICE_ACCOUNT_JSON}
+                        gcloud config set project ${PROJECT_ID}
+                        gcloud auth configure-docker --quiet
+                        docker build -t ${IMAGE_NAME_UAT} .
+                        docker push ${IMAGE_NAME_UAT}
+                    '''
+                }
+            }
+            when {
+                branch 'manali'
+            }
+            steps {
+                script {
+                    sh '''
+                        gcloud auth activate-service-account --key-file=${SERVICE_ACCOUNT_JSON}
+                        gcloud config set project ${PROJECT_ID}
+                        gcloud auth configure-docker --quiet
+                        docker build -t ${IMAGE_NAME_PROD} .
+                        docker push ${IMAGE_NAME_PROD}
+                    '''
+                }
+            }
         }
 
         stage('Deploy to QA') {
@@ -67,6 +95,27 @@ pipeline {
                     '''
                 }
             }
+            when {
+                branch 'las'
+            }
+            steps {
+                script {
+                    sh '''
+                        gcloud run deploy pyt-git-stack-uat --project ${PROJECT_ID} --image ${IMAGE_NAME_UAT} --platform managed --region us-west1 --port=8080 --allow-unauthenticated --min-instances 1 --max-instances 2 --memory 3Gi
+                    '''
+                }
+            }
+            when {
+                branch 'manali'
+            }
+            steps {
+                script {
+                    sh '''
+                        gcloud run deploy pyt-git-prod --project ${PROJECT_ID} --image ${IMAGE_NAME_PROD} --platform managed --region us-west1 --port=8080 --allow-unauthenticated --min-instances 1 --max-instances 2 --memory 3Gi
+                    '''
+                }
+            }
+        }
         }
 
         // stage('Manual Approval for UAT') {
@@ -98,67 +147,5 @@ pipeline {
         //         }
         //     }
         // }
-
-        stage('Auth and Docker Build for UAT') {
-            when {
-                branch 'las'
-            }
-            steps {
-                script {
-                    sh '''
-                        gcloud auth activate-service-account --key-file=${SERVICE_ACCOUNT_JSON}
-                        gcloud config set project ${PROJECT_ID}
-                        gcloud auth configure-docker --quiet
-                        docker build -t ${IMAGE_NAME_UAT} .
-                        docker push ${IMAGE_NAME_UAT}
-                    '''
-                }
-            }
-        }
-
-        stage('Deploy to UAT') {
-            when {
-                branch 'las'
-            }
-            steps {
-                script {
-                    sh '''
-                        gcloud run deploy pyt-git-stack-uat --project ${PROJECT_ID} --image ${IMAGE_NAME_UAT} --platform managed --region us-west1 --port=8080 --allow-unauthenticated --min-instances 1 --max-instances 2 --memory 3Gi
-                    '''
-                }
-            }
-        }
-
-        
-
-        stage('Auth and Docker Build for Prod') {
-            when {
-                branch 'manali'
-            }
-            steps {
-                script {
-                    sh '''
-                        gcloud auth activate-service-account --key-file=${SERVICE_ACCOUNT_JSON}
-                        gcloud config set project ${PROJECT_ID}
-                        gcloud auth configure-docker --quiet
-                        docker build -t ${IMAGE_NAME_PROD} .
-                        docker push ${IMAGE_NAME_PROD}
-                    '''
-                }
-            }
-        }
-
-        stage('Deploy to Prod') {
-            when {
-                branch 'manali'
-            }
-            steps {
-                script {
-                    sh '''
-                        gcloud run deploy pyt-git-prod --project ${PROJECT_ID} --image ${IMAGE_NAME_PROD} --platform managed --region us-west1 --port=8080 --allow-unauthenticated --min-instances 1 --max-instances 2 --memory 3Gi
-                    '''
-                }
-            }
-        }
     }
 }
