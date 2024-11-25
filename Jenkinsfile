@@ -7,7 +7,7 @@ pipeline {
     
     environment {
         PROJECT_ID = 'modern-heading-440004-q8' 
-        IMAGE_NAME_QA = "gcr.io/${PROJECT_ID}/reward_frontend_qa"
+        IMAGE_NAME_QA = "gcr.io/${PROJECT_ID}/reward_frontend_qa:latest"
         IMAGE_NAME_UAT = "gcr.io/${PROJECT_ID}/reward_frontend_uat"
         IMAGE_NAME_PROD = "gcr.io/${PROJECT_ID}/reward_frontend_prod"
         SERVICE_ACCOUNT_JSON = credentials('gcp-serv-accnt')
